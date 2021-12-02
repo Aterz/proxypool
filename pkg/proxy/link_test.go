@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/Sansui233/proxypool/pkg/tool"
+	"github.com/Aterz/proxypool/pkg/tool"
 	"github.com/ghodss/yaml"
 )
 
