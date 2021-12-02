@@ -30,9 +30,9 @@
 
 ## 安装
 
-以下四选一。
+以下五选一。
 
-### 使用Heroku
+### 1. 使用Heroku
 
 点击按钮进入部署页面，填写基本信息然后运行
 
@@ -47,33 +47,58 @@
 > 因为爬虫程序需要持续运行，所以至少选择 $7/月 的配置
 > 免费配置长时间无人访问会被heroku强制停止
 
-### 从源码编译
+### 2. 使用[fly.io](https://fly.io)
 
-需要安装Golang 
+> 注册fly.io需要绑定银行卡，支持银联借记卡。同时使用fly.io主要通过命令行工具flyctl，详情到[fly.io](https://fly.io)官网了解。
 
-```sh
+下载仓库源代码，修改 `fly.toml` 中的app与domain。在终端使用 `flyctl deploy` 部署即可。
+
+### 3. 从源码编译
+
+需要安装Golang
+
+```shell
 $ go get -u -v github.com/Sansui233/proxypool
 ```
 
 运行
-```shell script
+
+```shell
 $ go run main.go -c ./config/config.yaml
 ```
 
 编译
-```
-make
+
+```shell
+$ make
 ```
 
-### 下载预编译程序
+### 4. 下载预编译程序
 
 从这里下载预编译好的程序 [release](https://github.com/Sansui233/proxypool/releases)。
 
-### 使用docker
+### 5. 使用docker
 
-```sh
-docker pull docker.pkg.github.com/Sansui233/proxypool/proxypool:latest
+运行下面的命令下载 proxypool 镜像
+
+```shell
+$ docker pull ghcr.io/sansui233/proxypool:latest
 ```
+
+然后运行 proxypool 即可
+
+```shell
+$ docker run -d --restart=always \
+  --name=proxypool \
+  -p 12580:12580 \
+  -v /path/to/config:/proxypool-src/config \
+  ghcr.io/sansui233/proxypool \
+  -c config/config.yaml
+```
+
+使用 `-p` 参数映射配置文件里的端口  
+使用 `-v` 参数指定配置文件夹位置（配置文件要自行下载放到目录,方便修改）  
+使用 `-c` 参数指定配置文件路径，支持http链接
 
 ## 使用
 
@@ -88,16 +113,16 @@ docker pull docker.pkg.github.com/Sansui233/proxypool/proxypool:latest
 使用 `-c` 参数指定配置文件路径，支持http链接
 
 ```shell
-proxypool -c ./config/config.yaml
+$ proxypool -c ./config/config.yaml
 ```
 
 如果需要部署到VPS，更多细节请[查看wiki](https://github.com/Sansui233/proxypool/wiki/%E9%83%A8%E7%BD%B2%E5%88%B0VPS-Step-by-Step)。
 
 ## Clash配置文件
 
-远程部署时Clash配置文件访问：https://domain/clash/config
+远程部署时Clash配置文件访问：<https://domain/clash/config>
 
-本地运行时Clash配置文件访问：http://127.0.0.1:[端口]/clash/localconfig
+本地运行时Clash配置文件访问：<http://127.0.0.1:[端口]/clash/localconfig>
 
 ## 本地检查节点可用性
 
